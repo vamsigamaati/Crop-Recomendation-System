@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroAI - Smart Crop Recommendation System</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glow-container">
+        <div class="glow-circle glow-1"></div>
+        <div class="glow-circle glow-2"></div>
+        <div class="glow-circle glow-3"></div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="currentColor"/>
+                <path d="M12 3V12L19 19" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 3C8 3 5 7 5 12C5 17 9 21 12 21" stroke="var(--primary-light)" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span>Agro<span class="logo-accent">AI</span></span>
+        </div>
+        <nav>
+            <button class="nav-btn active" data-tab="predict-tab">
+                <svg viewBox="0 0 24 24" class="nav-icon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="currentColor"/></svg>
+                Advisor
+            </button>
+            <button class="nav-btn" data-tab="analytics-tab">
+                <svg viewBox="0 0 24 24" class="nav-icon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" fill="currentColor"/></svg>
+                Analytics
+            </button>
+            <button class="nav-btn" data-tab="info-tab">
+                <svg viewBox="0 0 24 24" class="nav-icon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="currentColor"/></svg>
+                Crop Directory
+            </button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- PREDICT TAB -->
+        <section id="predict-tab" class="tab-content active">
+            <div class="dashboard-grid">
+                <div class="card glass form-card">
+                    <div class="card-header">
+                        <h2>Soil & Environment Inputs</h2>
+                        <p class="subtitle">Enter the metrics below to receive a data-driven crop recommendation.</p>
+                    </div>
+                    
+                    <form id="recommendation-form">
+                        <div class="form-grid">
+                            <!-- N -->
+                            <div class="form-group">
+                                <label for="input-N">
+                                    <span>Nitrogen (N)</span>
+                                    <span class="unit">mg/kg</span>
+                                </label>
+                                <div class="input-container">
+                                    <input type="number" id="input-N" name="N" min="0" max="150" value="90" required>
+                                    <input type="range" class="range-slider" min="0" max="150" value="90" data-bind="input-N">
+                                </div>
+                                <span class="help-text">Recommended range: 0 - 150</span>
+                            </div>
+
+                            <!-- P -->
+                            <div class="form-group">
+                                <label for="input-P">
+                                    <span>Phosphorus (P)</span>
+                                    <span class="unit">mg/kg</span>
+                                </label>
+                                <div class="input-container">
+                                    <input type="number" id="input-P" name="P" min="0" max="150" value="42" required>
+                                    <input type="range" class="range-slider" min="0" max="150" value="42" data-bind="input-P">
+                                </div>
+                                <span class="help-text">Recommended range: 5 - 145</span>
+                            </div>
+
+                            <!-- K -->
+                            <div class="form-group">
+                                <label for="input-K">
+                                    <span>Potassium (K)</span>
+                                    <span class="unit">mg/kg</span>
+                                </label>
+                                <div class="input-container">
+                                    <input type="number" id="input-K" name="K" min="0" max="220" value="43" required>
+                                    <input type="range" class="range-slider" min="0" max="220" value="43" data-bind="input-K">
+                                </div>
+                                <span class="help-text">Recommended range: 5 - 205</span>
+                            </div>
+
+                            <!-- pH -->
+                            <div class="form-group">
+                                <label for="input-ph">
+                                    <span>pH Value</span>
+                                    <span class="unit">acidity</span>
+                                </label>
+                                <div class="input-container">
+                                    <input type="number" id="input-ph" name="ph" min="0" max="14" step="0.1" value="6.5" required>
+                                    <input type="range" class="range-slider" min="3.5" max="9.9" step="0.1" value="6.5" data-bind="input-ph">
+                                </div>
+                                <span class="help-text">Recommended range: 3.5 - 9.9</span>
+                            </div>
+
+                            <!-- Temperature -->
+                            <div class="form-group">
+                                <label for="input-temperature">
+                                    <span>Temperature</span>
+                                    <span class="unit">°C</span>
+                                </label>
+                                <div class="input-container">
+                                    <input type="number" id="input-temperature" name="temperature" min="0" max="50" step="0.1" value="21.0" required>
+                                    <input type="range" class="range-slider" min="8" max="45" step="0.1" value="21.0" data-bind="input-temperature">
+                                </div>
+                                <span class="help-text">Recommended range: 8°C - 45°C</span>
+                            </div>
+
+                            <!-- Humidity -->
+                            <div class="form-group">
+                                <label for="input-humidity">
+                                    <span>Humidity</span>
+                                    <span class="unit">%</span>
+                                </label>
+                                <div class="input-container">
+                                    <input type="number" id="input-humidity" name="humidity" min="0" max="100" step="0.1" value="82.0" required>
+                                    <input type="range" class="range-slider" min="10" max="100" step="0.1" value="82.0" data-bind="input-humidity">
+                                </div>
+                                <span class="help-text">Recommended range: 10% - 100%</span>
+                            </div>
+
+                            <!-- Rainfall -->
+                            <div class="form-group full-width">
+                                <label for="input-rainfall">
+                                    <span>Annual Rainfall</span>
+                                    <span class="unit">mm</span>
+                                </label>
+                                <div class="input-container">
+                                    <input type="number" id="input-rainfall" name="rainfall" min="0" max="400" step="0.1" value="203.0" required>
+                                    <input type="range" class="range-slider" min="20" max="300" step="0.1" value="203.0" data-bind="input-rainfall">
+                                </div>
+                                <span class="help-text">Recommended range: 20mm - 300mm</span>
+                            </div>
+                        </div>
+
+                        <div class="button-wrapper">
+                            <button type="submit" class="btn primary-btn btn-glowing">
+                                <span class="btn-text">Generate Recommendation</span>
+                                <span class="btn-icon">
+                                    <svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="currentColor"/></svg>
+                                </span>
+                            </button>
+                            <button type="button" id="reset-btn" class="btn secondary-btn">Reset</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Result Card -->
+                <div class="card glass result-card" id="result-container">
+                    <div class="result-placeholder">
+                        <div class="placeholder-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.17 19.58 10.53 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z" fill="currentColor"/></svg>
+                        </div>
+                        <h3>Awaiting Input parameters</h3>
+                        <p>Fill out the soil profile and environmental parameters, then click the button to generate a recommendation.</p>
+                    </div>
+
+                    <div class="result-content hidden">
+                        <div class="badge">Recommended Crop</div>
+                        <h1 id="recommended-crop-name">Rice</h1>
+                        
+                        <div class="confidence-container">
+                            <div class="confidence-circle-wrap">
+                                <svg class="progress-ring" width="120" height="120">
+                                    <circle class="progress-ring-bg" stroke="#1d2821" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                                    <circle class="progress-ring-bar" stroke="var(--primary)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60" stroke-dasharray="314.16" stroke-dashoffset="314.16"/>
+                                </svg>
+                                <div class="confidence-value" id="confidence-percentage">98%</div>
+                            </div>
+                            <div class="confidence-label">Prediction Confidence</div>
+                        </div>
+
+                        <div class="crop-details-box">
+                            <h4>Why this crop?</h4>
+                            <p id="crop-justification"></p>
+                        </div>
+
+                        <div class="probability-chart-container">
+                            <h4>Alternatives Confidence Distribution</h4>
+                            <div class="chart-wrapper">
+                                <canvas id="probabilities-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ANALYTICS TAB -->
+        <section id="analytics-tab" class="tab-content">
+            <div class="analytics-header">
+                <h2>Model Analytics & Insights</h2>
+                <p class="subtitle">Comparing Decision Tree and Random Forest classifiers trained on standard Indian agricultural profiles.</p>
+            </div>
+
+            <div class="comparison-grid">
+                <!-- Random Forest Card -->
+                <div class="card glass model-card rf">
+                    <div class="model-badge">Active Model</div>
+                    <h3>Random Forest Classifier</h3>
+                    <p class="desc">Ensemble method aggregating multiple Decision Trees to reduce variance and prevent overfitting.</p>
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="metric-val" id="rf-accuracy">99.3%</div>
+                            <div class="metric-label">Accuracy</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-val" id="rf-precision">99.3%</div>
+                            <div class="metric-label">Precision</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-val" id="rf-recall">99.3%</div>
+                            <div class="metric-label">Recall</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-val" id="rf-f1">99.3%</div>
+                            <div class="metric-label">F1-Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decision Tree Card -->
+                <div class="card glass model-card dt">
+                    <div class="model-badge dt-badge">Baseline Model</div>
+                    <h3>Decision Tree Classifier</h3>
+                    <p class="desc">Single flowchart-like structure splitting nodes. Prone to high variance and overfitting.</p>
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="metric-val" id="dt-accuracy">98.2%</div>
+                            <div class="metric-label">Accuracy</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-val" id="dt-precision">98.3%</div>
+                            <div class="metric-label">Precision</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-val" id="dt-recall">98.2%</div>
+                            <div class="metric-label">Recall</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-val" id="dt-f1">98.2%</div>
+                            <div class="metric-label">F1-Score</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Importance -->
+            <div class="card glass importance-card">
+                <div class="card-header">
+                    <h3>Environmental Feature Importance (Random Forest)</h3>
+                    <p class="subtitle">This analysis shows which characteristics influence the crop prediction algorithm the most.</p>
+                </div>
+                <div class="importance-body">
+                    <div class="chart-container-large">
+                        <canvas id="importance-chart"></canvas>
+                    </div>
+                    <div class="importance-details">
+                        <h4>Impact Insights</h4>
+                        <ul class="insights-list" id="insights-list">
+                            <li><strong class="highlight">Rainfall</strong> is highly critical for predicting water-intensive crops like Rice and Jute.</li>
+                            <li><strong class="highlight">Relative Humidity</strong> indicates local climate moisture levels affecting transpiration.</li>
+                            <li><strong class="highlight">NPK nutrients</strong> characterize soil chemical composition.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CROP DIRECTORY TAB -->
+        <section id="info-tab" class="tab-content">
+            <div class="analytics-header">
+                <h2>Supported Crop Profiles</h2>
+                <p class="subtitle">Overview of crops our machine learning model is trained to recognize and recommend.</p>
+            </div>
+            
+            <div class="crop-grid" id="crop-directory-grid">
+                <!-- Crop Cards will be injected dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 AgroAI decision support system. Built with Python, Scikit-Learn, and Flask.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
